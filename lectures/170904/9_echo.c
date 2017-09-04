@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-int main(int argc, char* argv[]) {
+int main() {
   char input[5];
   printf ("Give me a string\n");
   scanf("%s", input);

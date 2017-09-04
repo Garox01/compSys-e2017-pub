@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-int main(int argc, char* argv[]) {
+int main() {
   char input[20];
   printf ("Give me a string\n");
   fgets(input, sizeof(input), stdin);
