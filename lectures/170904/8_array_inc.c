@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 int main() {
-  int c = 2;
   int a[16];
   int b = 2;
   a[0] = 1;

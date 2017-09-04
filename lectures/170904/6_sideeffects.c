@@ -2,7 +2,7 @@
 
 int main() {
   int a = 3;
-  int b = 5;
+  // int b = 5;
   // int c = a++ + ++b;
   printf("a = %d\n", a++);
   printf("a = %d\n", ++a);
