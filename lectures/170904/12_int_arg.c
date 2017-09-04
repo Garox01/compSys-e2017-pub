@@ -13,9 +13,9 @@ int main(int argc, char *argv[]) {
     }
     else {
       printf("Input was: %d\n", input);
-    }    
+    }
   }
   else {
-    printf("Not one argument\n"); 
+    printf("Not one argument\n");
   }
 }

@@ -8,9 +8,6 @@ int main(int argc, char *argv[]) {
   int input2;
   int result;
 
-  switch (argc)
-  case 2: 
-
   if(argc == 2) { // 1st argument is the name of the program
     int res;
     res = sscanf(argv[1],"%d and %d",&input, &input2);
@@ -23,6 +20,10 @@ int main(int argc, char *argv[]) {
       printf("Result: %d \n", result);
     }
   }
+  else {
+    printf("Not one argument\n");
+  }
+
 }
 
 
