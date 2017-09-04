@@ -4,6 +4,6 @@ CFLAGS=-std=c11 -Wall -Werror -Wextra -pedantic -g
 
 .PHONY: clean all
 
-%: %.c
+%.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
