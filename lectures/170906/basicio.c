@@ -62,8 +62,32 @@ int main(int argc, char *argv[]) {
     fgets(input, sizeof(input), fp);
     printf("I read the string: \"%s\"\n", input);
 
-    // Reset to beginning of file
+    // Reset to position of file
     fsetpos(fp, &fp_start);
+
+    // Using feof(1) -- careful!!!
+    char last;
+    // NB, This is not an efficient implementation of last
+    while (!feof(fp)) {
+      last = fgetc(fp);
+    }
+    printf("The _not_ last char was: %c\n", last);
+    // If you look at the output, then this is not he last char.
+
+    // The issue is that feof(1) checks if the position of the file
+    // pointer is currently at the end of file. In the above case
+    // I will not be at the end position until after I read the
+    // character that moves the position to end-of-file. At this
+    // point I have passed the last character.
+
+    // A solution to this could be the store the previous.
+    rewind(fp); // Back to the beginning
+    char cur;
+    while (!feof(fp)) {
+      last = cur;
+      cur = fgetc(fp);
+    }
+    printf("The last char was: %c\n", last);
 
     // Always remember to close your file.
     fclose(fp);
