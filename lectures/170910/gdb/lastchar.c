@@ -1,7 +1,7 @@
 //
 // Author:  Michael Kirkedal Thomsen
 //
-// Find last character of a file
+// Find last character of a file - Using GDB
 //
 // Made for CompSys, e2017
 //
