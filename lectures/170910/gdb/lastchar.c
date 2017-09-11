@@ -23,8 +23,15 @@ int main(int argc, char *argv[]) {
     printf("File: %s was found, status: %d\n", argv[1], errno);
 
     char last;
+    char cur;
+    cur = fgetc(fp);
+    // feof evaluates to true when we points at end of file
+    // while (!feof(fp)) {
+    //   last = fgetc(fp);
+    // }
     while (!feof(fp)) {
-      last = fgetc(fp);
+      last = cur;
+      cur = fgetc(fp);
     }
     printf("The _not_ last char was: %c\n", last);
 

@@ -23,8 +23,11 @@ int tester(int* c, int k) {
   return 1;
 }
 
+// Update of array c in index i with v
 int update(int* c, int k, int v) {
   int val = v*v;
-  c[val] = k;
+  // By accidence, I swap the index and the value
+  // c[val] = k;
+  c[k] = val;
   return 1;
 }
