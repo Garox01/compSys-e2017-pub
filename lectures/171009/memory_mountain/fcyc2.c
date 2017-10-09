@@ -19,12 +19,14 @@ double *samples = NULL;
 /* Start new sampling process */
 static void init_sampler(int k, int maxsamples)
 {
-  if (values)
+  if (values) {
     free(values);
+  }
   values = calloc(k, sizeof(double));
 #if KEEP_SAMPLES
-  if (samples)
+  if (samples) {
     free(samples);
+  }
   /* Allocate extra for wraparound analysis */
   samples = calloc(maxsamples+k, sizeof(double));
 #endif
@@ -64,8 +66,9 @@ double get_min()
 /* What is relative error for kth smallest sample */
 double err(int k)
 {
-  if (samplecount < k)
+  if (samplecount < k) {
     return 1000.0;
+  }
   return (values[k-1] - values[0])/values[0];
 }
 
@@ -73,10 +76,12 @@ double err(int k)
 int has_converged(int k_arg, double epsilon_arg, int maxsamples)
 {
   if ((samplecount >= k_arg) &&
-      ((1 + epsilon_arg)*values[0] >= values[k_arg-1]))
+      ((1 + epsilon_arg)*values[0] >= values[k_arg-1])) {
     return samplecount;
-  if ((samplecount >= maxsamples))
+  }
+  if ((samplecount >= maxsamples)) {
     return -1;
+  }
   return 0;
 }
 
@@ -92,21 +97,23 @@ static void clear()
 {
   int x = sink;
   int i;
-  for (i = 0; i < ASIZE; i += STRIDE)
+  for (i = 0; i < ASIZE; i += STRIDE) {
     x += stuff[i];
+  }
   sink = x;
 }
 
 double fcyc2_full(test_funct f, int param1, int param2, int clear_cache,
-		 int k, double epsilon, int maxsamples, int compensate) 
+     int k, double epsilon, int maxsamples, int compensate) 
 {
   double result;
   init_sampler(k, maxsamples);
   if (compensate) {
     do {
       double cyc;
-      if (clear_cache)
-	clear();
+      if (clear_cache) {
+        clear();
+      }
       f(param1, param2);   /* warm cache */
       start_comp_counter();
       f(param1, param2);
@@ -116,8 +123,9 @@ double fcyc2_full(test_funct f, int param1, int param2, int clear_cache,
   } else {
     do {
       double cyc;
-      if (clear_cache)
-	clear();
+      if (clear_cache) {
+        clear();
+      }
       f(param1, param2); /* warm cache */
       start_counter();
       f(param1, param2);
@@ -129,16 +137,17 @@ double fcyc2_full(test_funct f, int param1, int param2, int clear_cache,
   {
     int i;
     printf(" %d smallest values: [", k);
-    for (i = 0; i < k; i++)
+    for (i = 0; i < k; i++) {
       printf("%.0f%s", values[i], i==k-1 ? "]\n" : ", ");
+    }
   }
 #endif
   result = values[0];
 #if !KEEP_VALS
-  free(values); 
+  free(values);
   values = NULL;
 #endif
-  return result;  
+  return result;
 }
 
 double fcyc2(test_funct f, int param1, int param2, int clear_cache)
@@ -158,8 +167,9 @@ static struct timeval tstart;
 /* Record current time */
 void start_counter_tod()
 {
-  if (Mhz == 0)
+  if (Mhz == 0) {
     Mhz = mhz_full(0, 10);
+  }
   gettimeofday(&tstart, NULL);
 }
 
@@ -200,16 +210,16 @@ static void callibrate(int verbose)
       times(&t);
       newc = t.tms_utime;
       if (newc > oldc) {
-	double cpt = (newt-oldt)/(newc-oldc);
-	if ((cyc_per_tick == 0.0 || cyc_per_tick > cpt) && cpt > RECORDTHRESH)
-	  cyc_per_tick = cpt;
-	/*
-	if (verbose)
-	  printf("Saw event lasting %.0f cycles and %d ticks.  Ratio = %f\n",
-		 newt-oldt, (int) (newc-oldc), cpt);
-	*/
-	e++;
-	oldc = newc;
+        double cpt = (newt-oldt)/(newc-oldc);
+        if ((cyc_per_tick == 0.0 || cyc_per_tick > cpt) && cpt > RECORDTHRESH)
+          cyc_per_tick = cpt;
+        /*
+        if (verbose)
+          printf("Saw event lasting %.0f cycles and %d ticks.  Ratio = %f\n",
+           newt-oldt, (int) (newc-oldc), cpt);
+        */
+        e++;
+        oldc = newc;
       }
       oldt = newt;
     }
@@ -222,8 +232,9 @@ static clock_t start_tick = 0;
 
 void start_comp_counter_tod() {
   struct tms t;
-  if (cyc_per_tick == 0.0)
+  if (cyc_per_tick == 0.0) {
     callibrate(0);
+  }
   times(&t);
   start_tick = t.tms_utime;
   start_counter_tod();
@@ -239,22 +250,23 @@ double get_comp_counter_tod() {
   ctime = time - ticks*cyc_per_tick;
   /*
   printf("Measured %.0f cycles.  Ticks = %d.  Corrected %.0f cycles\n",
-	 time, (int) ticks, ctime);
+   time, (int) ticks, ctime);
   */
   return ctime;
 }
 
 
 double fcyc2_full_tod(test_funct f, int param1, int param2, int clear_cache,
-		 int k, double epsilon, int maxsamples, int compensate) 
+     int k, double epsilon, int maxsamples, int compensate) 
 {
   double result;
   init_sampler(k, maxsamples);
   if (compensate) {
     do {
       double cyc;
-      if (clear_cache)
-	clear();
+      if (clear_cache) {
+        clear();
+      }
       start_comp_counter_tod();
       f(param1, param2);
       cyc = get_comp_counter_tod();
@@ -263,8 +275,9 @@ double fcyc2_full_tod(test_funct f, int param1, int param2, int clear_cache,
   } else {
     do {
       double cyc;
-      if (clear_cache)
-	clear();
+      if (clear_cache) {
+        clear();
+      }
       start_counter_tod();
       f(param1, param2);
       cyc = get_counter_tod();
@@ -275,8 +288,9 @@ double fcyc2_full_tod(test_funct f, int param1, int param2, int clear_cache,
   {
     int i;
     printf(" %d smallest values: [", k);
-    for (i = 0; i < k; i++)
+    for (i = 0; i < k; i++) {
       printf("%.0f%s", values[i], i==k-1 ? "]\n" : ", ");
+    }
   }
 #endif
   result = values[0];
@@ -291,9 +305,3 @@ double fcyc2_tod(test_funct f, int param1, int param2, int clear_cache)
 {
   return fcyc2_full_tod(f, param1, param2, clear_cache, 3, 0.01, 20, 0);
 }
-
-
-
-
-
-
